@@ -27,7 +27,7 @@
                         <router-link to="/shopcart" class="">
                             <i id="shoppingCartCount" class="iconfont icon-cart"></i>购物车(
                             <span >
-                                <span>4</span>
+                                <span>{{$store.getters.getBuyCount}}</span>
                             </span>)</router-link>
                     </div>
                 </div>
@@ -155,7 +155,7 @@ export default {
 </script>
 
 <style scoped>
-     @import "./statics/site/js/jqueryplugins/css/style.css"
+     @import "./statics/site/js/jqueryplugins/css/style.css";
 </style>
 
 

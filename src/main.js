@@ -16,7 +16,7 @@ Vue.use(VueLazyload, {
     loading: require("./statics/site/images/01.gif"),
     attempt: 1
 });
-Vue.use(Vuex)
+Vue.use(Vuex) // Vue.prototype.$store
 // 引入悬停效果中间件(注册)
 //   Vue.use(iView);
 // 导入根组件
@@ -54,18 +54,31 @@ const router = new VueRouter({
 });
 
 // 该对象中写的是核心模块
+// 按需导入 加大括号    
+import {addLocalGoods,getTotalCount,getLocalGoods} from "./common/localStorage"
 const store = new Vuex.Store({
-    // state: {
-    //   todos: [
-    //     { id: 1, text: '...', done: true },
-    //     { id: 2, text: '...', done: false }
-    //   ]
-    // },
-    // getters: {
-    //   doneTodos: state => {
-    //     return state.todos.filter(todo => todo.done)
-    //   }
-    // }
+    state:{
+        newBuyCount : getTotalCount()
+    },
+    getters:{
+        getBuyCount(state){
+            return state.newBuyCount
+        },
+        getLocalGoods(state){
+            return getLocalGoods()
+        }
+    },
+    mutations: {
+        /**
+         * 新增商品
+         * 
+         * @param {*} state 指的就是核心概念state，必须是第一个参数
+         * @param {*} goods 载荷
+         */
+        addGoods(state,goods){
+            state.newBuyCount = addLocalGoods(goods)
+        }
+    }
 });
 
 new Vue({

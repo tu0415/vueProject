@@ -46,142 +46,142 @@
             </div>
             <div class="goods-spec">
                     <h1>{{goods.goodsinfo.title}}</h1>
-                                        <p class="subtitle">{{goods.goodsinfo.sub_title}}</p>
-                                        <div class="spec-box">
-                                            <dl>
-                                                <dt>货号</dt>
-                                                <dd id="commodityGoodsNo">{{goods.goodsinfo.goods_no}}</dd>
-                                            </dl>
-                                            <dl>
-                                                <dt>市场价</dt>
-                                                <dd>
-                                                    <s id="commodityMarketPrice">¥{{goods.goodsinfo.market_price}}</s>
-                                                </dd>
-                                            </dl>
-                                            <dl>
-                                                <dt>销售价</dt>
-                                                <dd>
-                                                    <em id="commoditySellPrice" class="price">¥{{goods.goodsinfo.sell_price}}</em>
-                                                </dd>
-                                            </dl>
-                                        </div>
-                                        <div class="spec-box">
-                                            <dl>
-                                                <dt>购买数量</dt>
-                                                <dd>
-                                                    <div class="stock-box">
-                                                        <el-input-number v-model="buyCount"  :min="1" :max="goods.goodsinfo.stock_quantity" size="small"></el-input-number>
-                                                    </div>
-                                                    <span class="stock-txt">
-                                                        库存
-                                                        <em id="commodityStockNum">{{goods.goodsinfo.stock_quantity}}</em>件
-                                                    </span>
-                                                </dd>
-                                            </dl>
-                                            <dl>
-                                                <dd>
-                                                    <div id="buyButton" class="btn-buy" >
-                                                        <button  class="buy">立即购买</button>
-                                                        <button ref="addCart" @click= "addTopShopCart" 
-                                                         class="add">加入购物车</button>
-                                                    </div>
-                                                </dd>
-                                            </dl>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="goodsTabs" class="goods-tab bg-wrap">
-                                     <Affix>
-                                    <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
-                                        <ul>
-                                            <li>
-                                                <a @click= "isShowCommodity=true" href="javascript:;" :class= "{selected:isShowCommodity}" >商品介绍</a>
-                                            </li>
-                                            <li>
-                                                <a :class= "{selected:!isShowCommodity}"  @click= "isShowCommodity=false" href="javascript:;">商品评论</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                      </Affix>
-                                    <div v-show= "isShowCommodity" class="tab-content entry" style="display: block;">
-                                        <div style="padding:10px" v-html= "goods.goodsinfo.content"></div>
-                                    </div>
-                                    <div v-show= "!isShowCommodity" class="tab-content" style="display: block;">
-                                        <div class="comment-box">
-                                            <div id="commentForm" name="commentForm"
-                                                class="form-box">
-                                                <div class="avatar-box">
-                                                    <i class="iconfont icon-user-full"></i>
-                                                </div>
-                                                <div class="conn-box">
-                                                    <div class="editor">
-                                                        <textarea ref="textAreaRef" id="txtContent" name="txtContent" sucmsg=" " datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
-                                                        <span class="Validform_checktip"></span>
-                                                    </div>
-                                                    <div class="subcon">
-                                                        <input id="btnSubmit" @click= "postComment" name="submit" type="submit" value="提交评论" class="submit">
-                                                        <span class="Validform_checktip"></span>
-                                                    </div>
-                                                </div>
+                        <p class="subtitle">{{goods.goodsinfo.sub_title}}</p>
+                        <div class="spec-box">
+                            <dl>
+                                <dt>货号</dt>
+                                <dd id="commodityGoodsNo">{{goods.goodsinfo.goods_no}}</dd>
+                            </dl>
+                            <dl>
+                                <dt>市场价</dt>
+                                <dd>
+                                    <s id="commodityMarketPrice">¥{{goods.goodsinfo.market_price}}</s>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>销售价</dt>
+                                <dd>
+                                    <em id="commoditySellPrice" class="price">¥{{goods.goodsinfo.sell_price}}</em>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="spec-box">
+                                    <dl>
+                                        <dt>购买数量</dt>
+                                        <dd>
+                                            <div class="stock-box">
+                                                <el-input-number v-model="buyCount"  :min="1" :max="goods.goodsinfo.stock_quantity" size="small"></el-input-number>
                                             </div>
-                                            <ul id="commentList" class="list-box">
-                                                <p v-if= "commentInfo.totalcount === 0" style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);">暂无评论，快来抢沙发吧！</p>
-                                                <li v-for= "item in commentInfo.message" :key= "item.id">
-                                                    <div class="avatar-box">
-                                                        <i class="iconfont icon-user-full"></i>
-                                                    </div>
-                                                    <div class="inner-box">
-                                                        <div class="info">
-                                                            <span>{{item.user_name}}</span>
-                                                            <span>{{item.add_time | dateFmt("YYYY-DD-MM HH:mm:ss")}}</span>
-                                                        </div>
-                                                        <p>{{item.content}}</p>
-                                                    </div>
-                                                </li>
-                                              
-                                            </ul>
-                                            <div class="page-box" style="margin: 5px 0px 0px 62px;">
-                                                <el-pagination
-                                                    @size-change= "handleSizeChange"
-                                                    @current-change= "handleCurrentChange"
-                                                    :current-page= "pageIndex"
-                                                    :page-sizes= "[2, 5, 10, 20]"
-                                                    :page-size= "pageSize"
-                                                    layout="total, sizes, prev, pager, next, jumper"
-                                                    :total= "commentInfo.totalcount">
-                                                </el-pagination>
+                                            <span class="stock-txt">
+                                                库存
+                                                <em id="commodityStockNum">{{goods.goodsinfo.stock_quantity}}</em>件
+                                            </span>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dd>
+                                            <div id="buyButton" class="btn-buy" >
+                                                <button  class="buy">立即购买</button>
+                                                <button ref="addCart" @click= "addTopShopCart" 
+                                                    class="add">加入购物车</button>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </dd>
+                                    </dl>
                                 </div>
                             </div>
-                            <div class="left-220">
-                                <div class="bg-wrap nobg">
-                                    <div class="sidebar-box">
-                                        <h4>推荐商品</h4>
-                                        <ul class="side-img-list">
-                                            <li v-for="item in goods.hotgoodslist" :key="item.id">
-                                                <div class="img-box">
-                                                    <router-link :to= "'/goodsinfo/'+item.id" class="">
-                                                        <img :src="item.img_url">
-                                                    </router-link>
+                        </div>
+                        <div id="goodsTabs" class="goods-tab bg-wrap">
+                                <Affix>
+                            <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
+                                <ul>
+                                    <li>
+                                        <a @click= "isShowCommodity=true" href="javascript:;" :class= "{selected:isShowCommodity}" >商品介绍</a>
+                                    </li>
+                                    <li>
+                                        <a :class= "{selected:!isShowCommodity}"  @click= "isShowCommodity=false" href="javascript:;">商品评论</a>
+                                    </li>
+                                </ul>
+                            </div>
+                                </Affix>
+                            <div v-show= "isShowCommodity" class="tab-content entry" style="display: block;">
+                                <div style="padding:10px" v-html= "goods.goodsinfo.content"></div>
+                            </div>
+                            <div v-show= "!isShowCommodity" class="tab-content" style="display: block;">
+                                <div class="comment-box">
+                                    <div id="commentForm" name="commentForm"
+                                        class="form-box">
+                                        <div class="avatar-box">
+                                            <i class="iconfont icon-user-full"></i>
+                                        </div>
+                                        <div class="conn-box">
+                                            <div class="editor">
+                                                <textarea ref="textAreaRef" id="txtContent" name="txtContent" sucmsg=" " datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
+                                                <span class="Validform_checktip"></span>
+                                            </div>
+                                            <div class="subcon">
+                                                <input id="btnSubmit" @click= "postComment" name="submit" type="submit" value="提交评论" class="submit">
+                                                <span class="Validform_checktip"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul id="commentList" class="list-box">
+                                        <p v-if= "commentInfo.totalcount === 0" style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);">暂无评论，快来抢沙发吧！</p>
+                                        <li v-for= "item in commentInfo.message" :key= "item.id">
+                                            <div class="avatar-box">
+                                                <i class="iconfont icon-user-full"></i>
+                                            </div>
+                                            <div class="inner-box">
+                                                <div class="info">
+                                                    <span>{{item.user_name}}</span>
+                                                    <span>{{item.add_time | dateFmt("YYYY-DD-MM HH:mm:ss")}}</span>
                                                 </div>
-                                                <div class="txt-box">
-                                                    <router-link :to= "'/goodsinfo/'+item.id" class="">{{item.title}}</router-link>
-                                                    <span>{{item.add_time | dateFmt}}</span>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                                <p>{{item.content}}</p>
+                                            </div>
+                                        </li>
+                                        
+                                    </ul>
+                                    <div class="page-box" style="margin: 5px 0px 0px 62px;">
+                                        <el-pagination
+                                            @size-change= "handleSizeChange"
+                                            @current-change= "handleCurrentChange"
+                                            :current-page= "pageIndex"
+                                            :page-sizes= "[2, 5, 10, 20]"
+                                            :page-size= "pageSize"
+                                            layout="total, sizes, prev, pager, next, jumper"
+                                            :total= "commentInfo.totalcount">
+                                        </el-pagination>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="left-220">
+                        <div class="bg-wrap nobg">
+                            <div class="sidebar-box">
+                                <h4>推荐商品</h4>
+                                <ul class="side-img-list">
+                                    <li v-for="item in goods.hotgoodslist" :key="item.id">
+                                        <div class="img-box">
+                                            <router-link :to= "'/goodsinfo/'+item.id" class="">
+                                                <img :src="item.img_url">
+                                            </router-link>
+                                        </div>
+                                        <div class="txt-box">
+                                            <router-link :to= "'/goodsinfo/'+item.id" class="">{{item.title}}</router-link>
+                                            <span>{{item.add_time | dateFmt}}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
                 <!-- 被动画的元素 -->
         <transition  v-on:before-enter="beforeEnter"
-  v-on:enter="enter"
-  v-on:after-enter="afterEnter">
+                     v-on:enter="enter"
+                     v-on:after-enter="afterEnter">
              <div v-show= "isShow" ref="animateRef" v-if= "goods.imglist" class="animateDiv">
                  <img :src= "goods.imglist[0].thumb_path" alt="">
             </div>
@@ -266,7 +266,7 @@ export default {
                 setTimeout(() => {
                     // 获取动画开始时的位置
                     this.addOffset = $(this.$refs.addCart).offset();
-                    console.log(this.addOffset)
+                    // console.log(this.addOffset);
                     // 让他图片移动到开始位置
                     $(this.$refs.animateRef).css(this.addOffset);
                     // 获取动画结束时的位置
@@ -282,7 +282,7 @@ export default {
                 this.$route.params.goodsId
             }?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`;
             this.$axios.get(url).then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 this.commentInfo = res.data;
             });
         },
@@ -330,35 +330,42 @@ export default {
                 //
                 // this.postComment()
             });
-            this.getCommentListData()
+            this.getCommentListData();
         },
         // 加入购物车
         addTopShopCart() {
             this.isShow = true;
+            //调用Vuex的mutations方法
+                //载荷就是参数
+            const goods = {
+                goodsId: this.$route.params.goodsId,
+                buyCount: this.buyCount
+            }
+            this.$store.commit('addGoods',goods)
         },
         beforeEnter: function(el) {
-            el.style.top = `${this.addOffset.top}px`
-            el.style.left = `${this.addOffset.left}px`
-            el.style.transfrom = `scale(1)`
+            el.style.top = `${this.addOffset.top}px`;
+            el.style.left = `${this.addOffset.left}px`;
+            el.style.transfrom = `scale(1)`;
         },
         // 此回调函数是可选项的设置
         // 与 CSS 结合时使用
         enter: function(el, done) {
-            el.style.transition = "all 1s"
+            el.style.transition = "all 1s";
 
             // 刷新动画帧
-            el.offsetWidth
+            el.offsetWidth;
 
             // 设置结束位置
-            el.style.top = `${this.shoppingCartCountOffset.top}px`
-            el.style.left = `${this.shoppingCartCountOffset.left}px`
-            el.style.transfrom = `scale(1)`
+            el.style.top = `${this.shoppingCartCountOffset.top}px`;
+            el.style.left = `${this.shoppingCartCountOffset.left}px`;
+            el.style.transfrom = `scale(1)`;
 
             done();
         },
         afterEnter: function(el) {
             // ...
-            this.isShow = false
+            this.isShow = false;
         }
     }
 };

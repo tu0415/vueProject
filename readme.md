@@ -1,4 +1,6 @@
 #### vue项目搭建
+
+    项目打开方式 npm run dev 
     
     1. 创建一个项目的根目录
         item 
@@ -20,12 +22,13 @@
      
      cnpm i html-webpack-plugin -D   打包生成了bundle.js之后，运行bundle.js
      
-     cnpm i vuex -S 
+     cnpm i vuex -S 建一个空白仓库 存放核心模块
      
       直接新建一个空白项目
         
       vue init webpack-simple vue_project   (vue_project 文件名称)
-    
+
+#### 
         
         
     
