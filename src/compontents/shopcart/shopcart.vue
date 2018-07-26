@@ -68,11 +68,11 @@
                                     <td width="104" align="center">
                                         <!-- {{item.newBuycount}} -->
                                         <!-- 绑定后变成一个数字 不绑定是一个字符串 -->
-                                        <inputnumber :initCont= "item.newBuycount"></inputnumber>
+                                        <inputnumber :initCont= "item.newBuycount" :goodsId= "item.id" @numberChange= "getChangeGoods"></inputnumber>
                                     </td>
                                     <td width="104" align="left">{{item.sell_price * item.newBuycount}}</td>
                                     <td width="54" align="center">
-                                        <a href="javascript:void(0)">删除</a>
+                                        <a @click= "deleteGoods(index,item.id)" href="javascript:void(0)">删除</a>
                                     </td>
                                 </tr>
                                 <!---->
@@ -114,75 +114,112 @@
 </template>
 
 <style scoped>
-    .shopInfo{
-        display: flex;
-        align-items: center;
-    }
+.shopInfo {
+    display: flex;
+    align-items: center;
+}
 </style>
 
 <script>
-    // 导入
-    import inputnumber from "../subcomponents/inputnumber.vue"
+// 导入
+import inputnumber from "../subcomponents/inputnumber.vue";
 
-    export default {
-        components: {
-            inputnumber 
+//按需引入，需要加{}
+import { getLocalGoods } from "../../common/localStorage.js";
+
+export default {
+    components: {
+        inputnumber
+    },
+    // 计算属性
+    computed: {
+        // 计算总数量
+        getTotalCount() {
+            let totalCount = 0;
+            console.log("11")
+            this.goodsList.forEach(item => {
+                if (item.isSelected) {
+                    totalCount += item.newBuycount;
+                    console.log(totalCount)
+                }
+            });
+            return totalCount;
         },
-        // 计算属性
-        computed:{
-            // 计算总数量
-            getTotalCount(){
-                let totalCount = 0
-                this.goodsList.forEach(item=>{
-                    if(item.isSelected){
-                        totalCount += item.newBuycount
-                    }
+        getTotalPrice() {
+            let totalPrice = 0;
+
+            this.goodsList.forEach(item => {
+                if (item.isSelected) {
+                    totalPrice += item.newBuycount * item.sell_price;
+                }
+            });
+
+            return totalPrice;
+        }
+    },
+    data() {
+        return {
+            goodsList: []
+        };
+    },
+    created() {
+        this.getGoodsListData();
+    },
+    methods: {
+        getGoodsListData() {
+            //1.调用Vuex的getters的getLocalGoods方法
+            const localGoods = getLocalGoods();
+            // console.log(localGoods)
+
+            if (Object.keys(localGoods).length === 0) return;
+
+            //2.准备url
+            const url = `site/comment/getshopcargoods/${Object.keys(
+                localGoods
+            ).join(",")}`;
+            // console.log(Object.keys(localGoods).join(','))
+
+            //3.发送请求，获取数据
+            this.$axios.get(url).then(res => {
+                res.data.message.forEach(goods => {
+                    goods.newBuycount = localGoods[goods.id];
+                    goods.isSelected = true;
+                });
+
+                this.goodsList = res.data.message;
+            });
+        },
+        //当子组件触发了自定义事件 numberChange 之后，就会执行该处理函数
+        getChangeGoods(changeGoods) {
+            // console.log(changeGoods);
+            this.goodsList.forEach(goods => {
+                if (goods.id === changeGoods.goodsId) {
+                    goods.newBuycount = changeGoods.count;
+                }
+            });
+
+            //2.调用Vuex中Mutations修改的方法，传递载荷
+            this.$store.commit("updateGoods", changeGoods);
+        },
+        //删除商品
+        deleteGoods(index, goodsId) {
+            this.$confirm("确定要删除该商品吗?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    //确认
+                    //1.根据索引，删除goodsList的数据
+                    this.goodsList.splice(index, 1);
+
+                    //2.调用Vuex中mutation的删除方法，把goodsId当作载荷传递过去
+                    this.$store.commit("deleteGoodsById", goodsId);
                 })
-                return totalCount
-            },
-            getTotalPrice(){
-                let totalPrice = 0
-
-                this.goodsList.forEach(item=>{
-                    if(item.isSelected){
-                        totalPrice += item.newBuycount * item.sell_price
-                    }
-                })
-
-                return totalPrice
-            }
-        },
-        data() {
-            return {
-                goodsList: []
-            }
-        },
-        created() {
-            this.getGoodsListData()
-        },
-        methods: {
-            getGoodsListData() {
-                //1.调用Vuex的getters的getLocalGoods方法
-                const localGoods = this.$store.getters.getLocalGoods
-                // console.log(localGoods)
-
-                if (Object.keys(localGoods).length === 0) return
-
-
-                //2.准备url
-                const url = `site/comment/getshopcargoods/${Object.keys(localGoods).join(',')}`
-                // console.log(Object.keys(localGoods).join(','))
-
-                //3.发送请求，获取数据
-                this.$axios.get(url).then(res => {
-                    res.data.message.forEach(goods => {
-                        goods.newBuycount = localGoods[goods.id]
-                        goods.isSelected = true
-                    })
-
-                    this.goodsList = res.data.message
-                })
-            }
+                .catch(() => {
+                    //取消
+                });
         }
     }
+};
 </script>

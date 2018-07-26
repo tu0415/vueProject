@@ -55,7 +55,7 @@ const router = new VueRouter({
 
 // 该对象中写的是核心模块
 // 按需导入 加大括号    
-import {addLocalGoods,getTotalCount,getLocalGoods} from "./common/localStorage"
+import {addLocalGoods,getTotalCount,getLocalGoods,updateLocalGoods,deleteLocalGoodsById} from "./common/localStorage"
 const store = new Vuex.Store({
     state:{
         newBuyCount : getTotalCount()
@@ -63,10 +63,10 @@ const store = new Vuex.Store({
     getters:{
         getBuyCount(state){
             return state.newBuyCount
-        },
-        getLocalGoods(state){
-            return getLocalGoods()
         }
+        // getLocalGoods(state){
+        //     return getLocalGoods()
+        // }
     },
     mutations: {
         /**
@@ -77,6 +77,24 @@ const store = new Vuex.Store({
          */
         addGoods(state,goods){
             state.newBuyCount = addLocalGoods(goods)
+        },
+         /**
+         * 修改商品
+         * 
+         * @param {*} state 指的就是核心概念state，必须是第一个参数
+         * @param {*} goods 载荷
+         */
+        updateGoods(state,goods){
+            state.newBuyCount = updateLocalGoods(goods)
+        },
+        /**
+         * 删除商品
+         * 
+         * @param {*} state 指的就是核心概念state，必须是第一个参数
+         * @param {*} goods 载荷
+         */
+        deleteGoodsById(state,goodsId){
+            state.newBuyCount = deleteLocalGoodsById(goodsId)
         }
     }
 });

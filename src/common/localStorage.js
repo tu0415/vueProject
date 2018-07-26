@@ -40,3 +40,40 @@ export const addLocalGoods = goods => {
     return getTotalCount()
 
 }
+
+
+/**
+ * 按需导出，不要加default
+ * @param {*} goods 类似于 {goodsId:87,count:3}
+ */
+export const updateLocalGoods = goods => {
+    //1.先获取本地的商品对象
+    const localGoods = getLocalGoods()
+
+    //2.修改本地商品的数量
+    localGoods[goods.goodsId] = goods.count
+
+    //3.保存到本地 {87: 4, 88: 2}
+    localStorage.setItem(KEY,JSON.stringify(localGoods))
+
+    //4.返回本地最新的商品总数
+    return getTotalCount()
+}
+
+/**
+ * 按需导出，不要加default
+ * @param {*} goodsId 类似于 goodsId就是商品的id
+ */
+export const deleteLocalGoodsById = goodsId =>{
+    //1.先获取本地的商品对象
+    const localGoods = getLocalGoods()
+
+    //2.删除商品id对应的商品
+    delete localGoods[goodsId]
+
+    //3.保存到本地 {87: 4, 88: 2}
+    localStorage.setItem(KEY,JSON.stringify(localGoods))
+
+    //4.返回本地最新的商品总数
+    return getTotalCount()
+}
