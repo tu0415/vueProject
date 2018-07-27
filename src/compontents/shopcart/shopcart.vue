@@ -103,8 +103,8 @@
                     </div>
                     <div class="cart-foot clearfix">
                         <div class="right-box">
-                            <button class="button">继续购物</button>
-                            <button class="submit">提交订单</button>
+                            <button class="button" @click= "continueBuy" >继续购物</button>
+                            <button class="submit" @click= "goToOrder" >提交订单</button>
                         </div>
                     </div>
                 </div>
@@ -136,11 +136,11 @@ export default {
         // 计算总数量
         getTotalCount() {
             let totalCount = 0;
-            console.log("11")
+            console.log("11");
             this.goodsList.forEach(item => {
                 if (item.isSelected) {
                     totalCount += item.newBuycount;
-                    console.log(totalCount)
+                    console.log(totalCount);
                 }
             });
             return totalCount;
@@ -219,6 +219,30 @@ export default {
                 .catch(() => {
                     //取消
                 });
+        },
+        continueBuy() {
+            this.$router.push({ path: "/site/goodslist" });
+        },
+        //提交订单
+        goToOrder() {
+            const tempArray = [];
+
+            this.goodsList.forEach(goods => {
+                if (goods.isSelected) {
+                    tempArray.push(goods.id);
+                }
+            });
+
+            if (tempArray.length == 0) {
+                this.$message({
+                    message: "请至少选择一件商品来下单",
+                    type: "warning"
+                });
+                 return;
+            }
+
+            //通过编程式导航，跳转到订单页面
+            this.$router.push({ path: 'order',query: {id: tempArray.join(",")}});
         }
     }
 };

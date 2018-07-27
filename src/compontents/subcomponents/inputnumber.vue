@@ -36,6 +36,7 @@ export default {
             count: 1
         };
     },
+    
     created() {
         this.count = this.initCont;
     },

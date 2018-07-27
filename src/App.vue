@@ -12,16 +12,16 @@
                         <a target="_blank" href="#"></a>
                     </div>
                     <div id="menu" class="right-box">
-                        <span style="display: none;">
-                            <a href="" class="">登录</a>
+                        <span v-show= "!isLogin" style="display: none;">
+                            <router-link to="/login" class="">登录</router-link>
                             <strong>|</strong>
                             <a href="" class="">注册</a>
                             <strong>|</strong>
                         </span>
-                        <span>
+                        <span v-show= "isLogin">
                             <a href="" class="">会员中心</a>
                             <strong>|</strong>
-                            <a>退出</a>
+                            <a @click= "logoout">退出</a>
                             <strong>|</strong>
                         </span>
                         <router-link to="/shopcart" class="">
@@ -120,10 +120,44 @@
 
 <script>
 // 导入jquery插件
-import $ from "jquery";
-import Vue from "vue"
+// import $ from "jquery";
+// import Vue from "vue";
+import { bus } from "./common/bus.js";
 
 export default {
+    created() {
+        bus.$on("logined", isLogin => {
+            this.isLogin = isLogin;
+        });
+    },
+    data() {
+        return {
+            isLogin: false
+        };
+        this.checkLogin();
+    },
+    methods: {
+        // 判断是否登录
+        checkLogin() {
+            this.$axios.get(`site/account/isLogin`).then(res => {
+                if (res.data.code === "logined") {
+                    this.isLogin = true;
+                } else {
+                    this.isLogin = false;
+                }
+            });
+        },
+        // 退出
+        logoout() {
+            this.$axios.get(`site/account/logout`).then(res => {
+                if (res.data.status === 0) {
+                    this.isLogin = false;
+                    // 去首页
+                    this.$router.push("goodslist");
+                }
+            });
+        }
+    },
     mounted() {
         $("#menu2 li a").wrapInner('<span class="out"></span>');
         $("#menu2 li a").each(function() {
@@ -155,7 +189,7 @@ export default {
 </script>
 
 <style scoped>
-     @import "./statics/site/js/jqueryplugins/css/style.css";
+@import "./statics/site/js/jqueryplugins/css/style.css";
 </style>
 
 
