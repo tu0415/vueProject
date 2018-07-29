@@ -1,6 +1,5 @@
 <template>
       <div>
-          
             <div class="section">
             <div class="location">
                 <span>当前位置：</span>
@@ -70,7 +69,7 @@
                                         <dt>购买数量</dt>
                                         <dd>
                                             <div class="stock-box">
-                                                <el-input-number v-model="buyCount"  :min="1" :max="goods.goodsinfo.stock_quantity" size="small"></el-input-number>
+                                                <el-input-number v-model= "buyCount"  :min="1" :max="goods.goodsinfo.stock_quantity" size="small"></el-input-number>
                                             </div>
                                             <span class="stock-txt">
                                                 库存
@@ -336,12 +335,12 @@ export default {
         addTopShopCart() {
             this.isShow = true;
             //调用Vuex的mutations方法
-                //载荷就是参数
+            //载荷就是参数
             const goods = {
                 goodsId: this.$route.params.goodsId,
                 buyCount: this.buyCount
-            }
-            this.$store.commit('addGoods',goods)
+            };
+            this.$store.commit("addGoods", goods);
         },
         beforeEnter: function(el) {
             el.style.top = `${this.addOffset.top}px`;

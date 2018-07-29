@@ -5,6 +5,8 @@ import ElementUI from "element-ui";
 import VueLazyload from "vue-lazyload"; //引入这个懒加载插件
 // import iView from 'iview'; // 悬停效果插件
 import Vuex from "vuex";
+// import Distpicker from 'v-distpicker'
+
 
 //集成中间件/插件【注意：必须是基于Vue的】
 Vue.use(VueRouter); //Vue.prototype.$route  {{this.$route.params.goodsId}}获取带过去的ID值
@@ -17,6 +19,9 @@ Vue.use(VueLazyload, {
     attempt: 1
 });
 Vue.use(Vuex); // Vue.prototype.$store
+
+
+// Vue.component('v-distpicker', Distpicker)
 // 引入悬停效果中间件(注册)
 //   Vue.use(iView);
 // 导入根组件
@@ -47,6 +52,7 @@ import shopcart from "./compontents/shopcart/shopcart.vue";
 import goodsinfo from "./compontents/goods/goodsinfo.vue";
 import order from "./compontents/order/order.vue";
 import login from "./compontents/account/login.vue";
+import payOrder from "./compontents/pay/payOrder.vue";
 
 const router = new VueRouter({
     routes: [
@@ -56,7 +62,8 @@ const router = new VueRouter({
         { path: "/goodsinfo/:goodsId", component: goodsinfo },
         { path: "/login/", component: login },
         { path: "/order/:ids", component: order }, //这种传参，我们称之为params
-        { path: "/order", component: order, meta: { needLogin: true } }
+        { path: "/order", component: order, meta: { needLogin: true } },
+        { path: "/pay", component: payOrder, meta: { needLogin: true } },
     ]
 });
  
